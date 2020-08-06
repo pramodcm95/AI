@@ -1,3 +1,4 @@
 # AI
 
-This Repo contains various projects / algorithm's of various brnaches of AI.
+This Repo contains projects of various branches of AI.
+
