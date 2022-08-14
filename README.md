@@ -26,7 +26,7 @@ Instructions to Run:
      docker run -it <image created above>
 # 2) Using Git:
      Clone to this repo using: git clone https://github.com/pramodcm95/int_task_RL.git
-     cd int_task_RL
+     cd gym_platform_RL
      pip install -r requirements.txt
      git clone https://github.com/cycraig/gym-platform.git
      PPO_gym_platform.py
