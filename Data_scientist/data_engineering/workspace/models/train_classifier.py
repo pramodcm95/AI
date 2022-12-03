@@ -25,7 +25,7 @@ import pickle
 def load_data(database_filepath):
     # load data from databasepython app
     engine = create_engine('sqlite:///InsertDatabaseName.db')
-    df = pd.read_sql_table(database_filepath,engine)
+    df = pd.read_sql_table('InsertDatabaseName',engine)
     # dropping a column which is just traslation in different language
     df = df.drop('original',axis=1)
     # there are some rows with empty sapces as messages which will thrw an error letter
