@@ -40,6 +40,20 @@ def clean_data(df):
     # rename the columns of `categories`
     categories.columns = category_colnames
     
+    # Checking for non-binay nature of any categories
+    columns_to_be_processed = []
+    for column in categories:
+        if len(categories[column].unique()) >= 3:
+            columns_to_be_processed.append(column)
+            
+    # using value_counts to decide what to do with this column
+    for col in columns_to_be_processed:
+        print(categories[col].value_counts())
+
+    # we are renaming related-2 as related-1
+    categories[columns_to_be_processed[0]] = categories[columns_to_be_processed[0]].apply(lambda x: categories[columns_to_be_processed[0]].unique()[1] if x==categories[columns_to_be_processed[0]].unique()[2] else x)  
+    
+    
     # Convert category values to just numbers 0 or 1
     for column in categories:
         # set each value to be the last character of the string

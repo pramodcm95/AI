@@ -83,7 +83,14 @@ def build_model():
         ('tfidf', TfidfTransformer()),
         ('model',MultiOutputClassifier(RandomForestClassifier()))
     ])
-    return pipeline
+    parameters = {
+        'model__estimator__n_estimators': [5, 10, 20],
+        'model__estimator__min_samples_split': [0.1,0.2,0.4],
+        #'model__min_samples_split': [2, 3, 4]
+    }
+
+    cv = GridSearchCV(pipeline, param_grid=parameters)
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
