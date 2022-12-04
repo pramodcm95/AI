@@ -3,6 +3,15 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    This function loads two files in csv format and merges them
+    Input:
+    messages_filepath - path to messages.csv file
+    messages_filepath - path to categories.csv file
+    
+    Returns:
+    Dataframe with messages and categories merged
+    """
     # load messages dataset
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
@@ -12,6 +21,14 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """
+    This function cleans the given data by general pre processing ideas like removing duplicates, removing invalid data and others
+    Input:
+    df - Raw dataframe
+    
+    Returns:
+    Cleaned dataframe
+    """
     # create a dataframe of the 36 individual category columns
     categories = df['categories'].str.split(';',expand=True)
     # select the first row of the categories dataframe
@@ -44,8 +61,15 @@ def clean_data(df):
     return df
     
 def save_data(df, database_filename):
-    engine = create_engine('sqlite:///InsertDatabaseName.db')
-    df.to_sql('InsertDatabaseName', engine, index=False)  
+    """
+    This function saves the processed data from ETL pipeline to Database
+    Input:
+    df - Processed dataframe
+    database_filename - Path to db
+
+    """
+    engine = create_engine('sqlite:///'+database_filename.split('/')[1])
+    df.to_sql(database_filename.split('/')[1].split('.')[0], engine, index=False, if_exists='replace')  
     print("---- Data is clean and Ready for modelling ----")
 
 

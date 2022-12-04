@@ -23,9 +23,19 @@ from sklearn.model_selection import GridSearchCV
 import pickle 
 
 def load_data(database_filepath):
+    """
+    This function loads the data from ETL pipeline
+    Input:
+    database_filepath - Path to db with ETL processed data
+    
+    Returns:
+    X - Entire dataset with features only
+    y - Categories each datapoint belong to
+    Categories - Different categories avilable in dataset
+    """
     # load data from databasepython app
-    engine = create_engine('sqlite:///InsertDatabaseName.db')
-    df = pd.read_sql_table('InsertDatabaseName',engine)
+    engine = create_engine('sqlite:///'+database_filepath.split('/')[1])
+    df = pd.read_sql_table(database_filepath.split('/')[1].split('.')[0],engine)
     # dropping a column which is just traslation in different language
     df = df.drop('original',axis=1)
     # there are some rows with empty sapces as messages which will thrw an error letter
@@ -37,6 +47,14 @@ def load_data(database_filepath):
     return X, y, list(df.columns[3:])
 
 def tokenize(text):
+    """
+    This function takes a raw text and returns cleaned tokens
+    Input:
+    text - Raw text(messages)
+    
+    Returns:
+    clean_tokens - A list of individual words in a given sentence
+    """
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     #print(text)
     detected_urls = re.findall(url_regex, text)
@@ -54,6 +72,12 @@ def tokenize(text):
     return clean_tokens
 
 def build_model():
+    """
+    This function builds the machine learning pipeline
+    
+    Returns:
+    pipeline - Sklearn ML pipeline
+    """
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -63,6 +87,14 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """
+    This function evaluates the trained pipeline
+    Input:
+    model - Trained model
+    X_test - Test set features
+    Y_test - Categories of each test datapoint
+    category_names - all possible categories name in dataset
+    """
     y_pred = model.predict(X_test)
     for col in range(Y_test.shape[1]):
         print("Current Category is titles  "+ category_names[col] )
