@@ -42,7 +42,9 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-    
+    # Highest number of categories in dataset(values in percentage)
+    top_three_categories_values = (df[df.columns[4:]].sum()/len(df[df.columns[4:]]) * 100).nlargest(3)
+    top_three_categories_name = list(top_three_categories_values.index.values)
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -61,6 +63,24 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=top_three_categories_name,
+                    y=top_three_categories_values
+                )
+            ],
+
+            'layout': {
+                'title': 'Highest number of categories in dataset(in %)',
+                'yaxis': {
+                    'title': "Top 3 categories"
+                },
+                'xaxis': {
+                    'title': "Percentage"
                 }
             }
         }
