@@ -1,0 +1,19 @@
+FROM continuumio/miniconda3
+RUN conda create -n env python=3.6
+RUN echo "source activate env" > ~/.bashrc
+# ENV PATH /opt/conda/envs/env/bin:$PATH
+
+
+RUN conda install pip
+
+# Any working directory
+WORKDIR /home/pramod/
+ADD requirements.txt /home/pramod/
+RUN pip install -r requirements.txt
+COPY data /home/pramod/data
+COPY tests.py /home/pramod/
+COPY utilities.py /home/pramod/
+COPY main.py /home/pramod/
+COPY visualize.py /home/pramod/
+COPY preprocess.py /home/pramod/
+CMD [ "python3", "./main.py"]
